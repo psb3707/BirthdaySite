@@ -14,6 +14,7 @@ const navItems = [
   { href: "/upload", label: "업로드" },
 ]
 
+
 // 기본 샘플 이미지들
 const defaultImages = [
   { 
