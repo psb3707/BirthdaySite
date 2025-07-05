@@ -6,6 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Heart, Sparkles, Camera, Loader2, ChevronLeft, ChevronRight, Play, Pause, Upload, X, Trash2, MoreHorizontal, RefreshCw } from "lucide-react"
+import CelebrationEffect from "@/components/celebration-effect"
 
 const navItems = [
   { href: "/", label: "홈" },
@@ -74,6 +75,7 @@ export default function HomePage(): JSX.Element {
   const [isLoadingGallery, setIsLoadingGallery] = useState<boolean>(false)
   const [daysCount, setDaysCount] = useState<number>(0)
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right')
+  const [showCelebration, setShowCelebration] = useState<boolean>(false)
   const slideShowRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -85,6 +87,11 @@ export default function HomePage(): JSX.Element {
     const diffTime = Math.abs(today.getTime() - startDate.getTime())
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
     setDaysCount(diffDays)
+
+    // 500일 축하 이펙트 표시 (정확히 500일일 때만)
+    if (diffDays === 500) {
+      setShowCelebration(true)
+    }
 
     // 갤러리 사진 로드
     loadGalleryPhotos()
@@ -269,6 +276,10 @@ export default function HomePage(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-romantic-gradient overflow-hidden">
+      {/* 500일 축하 이펙트 */}
+      {showCelebration && (
+        <CelebrationEffect onComplete={() => setShowCelebration(false)} />
+      )}
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
