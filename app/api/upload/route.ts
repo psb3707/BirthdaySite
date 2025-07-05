@@ -11,6 +11,14 @@ cloudinary.config({
 
 export async function POST(request: NextRequest) {
   try {
+    // 환경 변수 확인
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+      return NextResponse.json(
+        { error: 'Cloudinary configuration missing' }, 
+        { status: 500 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
     const title = formData.get('title') as string;
@@ -26,10 +34,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 파일 크기 검증 (10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    // 파일 크기 검증 (5MB로 제한 - 서버리스 함수 제한 고려)
+    if (file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
-        { error: 'File size too large (max 10MB)' }, 
+        { error: 'File size too large (max 5MB)' }, 
         { status: 400 }
       );
     }
@@ -47,7 +55,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // Cloudinary에 업로드
-    const result = await new Promise((resolve, reject) => {
+    const result = await new Promise<any>((resolve, reject) => {
       cloudinary.uploader.upload_stream(
         {
           folder: 'our-memories',
@@ -81,12 +89,12 @@ export async function POST(request: NextRequest) {
       format: result.format
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Upload error:', error);
     return NextResponse.json(
       { 
         error: 'Upload failed',
-        details: error.message 
+        details: error?.message || 'Unknown error'
       },
       { status: 500 }
     );

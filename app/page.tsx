@@ -281,11 +281,11 @@ export default function HomePage(): JSX.Element {
         <CelebrationEffect onComplete={() => setShowCelebration(false)} />
       )}
       {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute animate-float opacity-20"
+            className="absolute animate-float opacity-20 pointer-events-none"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -293,7 +293,7 @@ export default function HomePage(): JSX.Element {
               animationDuration: `${3 + Math.random() * 2}s`,
             }}
           >
-            <Sparkles className="w-4 h-4 text-romantic-gold" />
+            <Sparkles className="w-4 h-4 text-romantic-gold pointer-events-none" />
           </div>
         ))}
       </div>
@@ -348,7 +348,7 @@ export default function HomePage(): JSX.Element {
       <main className="relative z-10 max-w-6xl mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[70vh]">
           {/* Left Content */}
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-8 animate-fade-in relative z-20 order-2 lg:order-1">
             <div className="space-y-4">
               <h1 className="font-serif text-5xl lg:text-6xl text-romantic-text leading-tight">
                 사랑하는
@@ -362,26 +362,30 @@ export default function HomePage(): JSX.Element {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
-                asChild
+                onClick={() => {
+                  window.location.href = '/gallery';
+                }}
                 size="lg"
                 className="bg-romantic-sky-deep hover:bg-romantic-sky text-white rounded-full px-8 py-6 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
-                <Link href="/gallery" className="flex items-center space-x-2 font-korean">
+                <div className="flex items-center space-x-2 font-korean">
                   <Camera className="w-5 h-5" />
                   <span>우리 추억 보기</span>
-                </Link>
+                </div>
               </Button>
 
               <Button
-                asChild
+                onClick={() => {
+                  window.location.href = '/letter';
+                }}
                 variant="outline"
                 size="lg"
                 className="border-2 border-romantic-pink-deep text-romantic-pink-deep hover:bg-romantic-pink-light rounded-full px-8 py-6 text-lg font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href="/letter" className="flex items-center space-x-2 font-korean">
+                <div className="flex items-center space-x-2 font-korean">
                   <Heart className="w-5 h-5" />
                   <span>편지 읽기</span>
-                </Link>
+                </div>
               </Button>
             </div>
 
@@ -403,7 +407,7 @@ export default function HomePage(): JSX.Element {
           </div>
 
           {/* Right Content - Enhanced Slideshow */}
-          <div className="relative animate-fade-in lg:justify-self-end" style={{ animationDelay: "0.3s" }}>
+          <div className="relative animate-fade-in lg:justify-self-end z-10 order-1 lg:order-2" style={{ animationDelay: "0.3s" }}>
             <div className="relative">
               {/* Decorative elements */}
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-romantic-pink-light rounded-full opacity-50 animate-float"></div>
@@ -423,7 +427,7 @@ export default function HomePage(): JSX.Element {
               )}
 
               {/* Slideshow Container - Enhanced */}
-              <div className="relative bg-white p-4 rounded-3xl shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500 group w-[420px]">
+              <div className="relative bg-white p-4 rounded-3xl shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500 group w-[320px] lg:w-[420px] mx-auto lg:mx-0">
                 {/* Gallery Status Indicator */}
                 <div className="absolute -top-2 -right-2 z-10">
                   <div className="flex items-center space-x-2">
@@ -444,19 +448,18 @@ export default function HomePage(): JSX.Element {
                 </div>
 
                 {/* Enhanced Image Container with Smart Background */}
-                <div className="relative overflow-hidden rounded-2xl w-[388px] h-[485px]">
+                <div className="relative overflow-hidden rounded-2xl w-[288px] lg:w-[388px] h-[360px] lg:h-[485px]">
                   {/* Gradient Background for better appearance with c_fit */}
                   <div className="absolute inset-0 bg-gradient-to-br from-romantic-cream-light via-white to-romantic-sky-light"></div>
                   
                   <div 
                     className="flex transition-transform duration-700 ease-in-out h-full"
                     style={{ 
-                      transform: `translateX(-${currentImageIndex * 388}px)`, // 픽셀 단위로 정확한 이동
-                      width: `${slideImages.length * 388}px` // 총 너비를 픽셀로 설정
+                      transform: `translateX(-${currentImageIndex * 100}%)`, // 백분율로 변경
                     }}
                   >
                     {slideImages.map((image, index) => (
-                      <div key={image.id} className="relative flex-shrink-0 h-full" style={{ width: '388px' }}>
+                      <div key={image.id} className="relative flex-shrink-0 h-full w-full">
                         {/* Image with proper sizing */}
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Image
@@ -585,10 +588,12 @@ export default function HomePage(): JSX.Element {
             </p>
             <div className="flex justify-center space-x-4">
               <Button
-                asChild
+                onClick={() => {
+                  window.location.href = '/gallery';
+                }}
                 className="bg-romantic-gold hover:bg-romantic-gold/90 text-romantic-text rounded-full font-korean hover:scale-105 transition-transform"
               >
-                <Link href="/gallery">탐험 시작하기</Link>
+                탐험 시작하기
               </Button>
             </div>
           </div>

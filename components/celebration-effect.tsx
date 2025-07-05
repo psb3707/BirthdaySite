@@ -37,7 +37,7 @@ export default function CelebrationEffect({ onComplete }: CelebrationEffectProps
 
   return (
     <div 
-      className={`fixed inset-0 z-50 bg-gradient-to-br from-romantic-sky via-romantic-pink-light to-romantic-gold transition-opacity duration-1500 ${
+      className={`fixed inset-0 z-50 bg-gradient-to-br from-romantic-sky via-romantic-pink-light to-romantic-gold transition-opacity duration-1500 pointer-events-none ${
         fadeOut ? 'opacity-0' : 'opacity-100'
       }`}
     >
